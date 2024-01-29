@@ -1,6 +1,6 @@
 'use strict';
 
-// Last time updated: 2024-01-03 12:51:19 PM UTC
+// Last time updated: 2024-01-29 11:24:37 PM UTC
 
 // ________________
 // RecordRTC v5.6.3
@@ -5162,7 +5162,11 @@ function MultiStreamsMixer(arrayOfMediaStreams, elementClass) {
             height = video.stream.height;
         }
 
-        context.drawImage(video, x, y, width, height);
+        if (video.stream.drawImage) {
+            video.stream.drawImage(context, video, x, y, width, height);
+        } else {
+            context.drawImage(video, x, y, width, height);
+        }
 
         if (typeof video.stream.onRender === 'function') {
             video.stream.onRender(context, x, y, width, height, idx);
