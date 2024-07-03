@@ -2015,8 +2015,12 @@ function getSeekableBlob(inputBlob, callback) {
     var fileReader = new FileReader();
     fileReader.onload = function(e) {
         var ebmlElms = decoder.decode(this.result);
+        const validEmlType = ["m", "u", "i", "f", "s", "8", "b", "d"] // This is from elm type of the lib
+        ebmlElms = ebmlElms?.filter(elm => validEmlType.includes(elm.type))
         ebmlElms.forEach(function(element) {
-            reader.read(element);
+            if (element.type !== 'unknown') {
+                reader.read(element);
+            }
         });
         reader.stop();
         var refinedMetadataBuf = tools.makeMetadataSeekable(reader.metadatas, reader.duration, reader.cues);
