@@ -2016,7 +2016,9 @@ function getSeekableBlob(inputBlob, callback) {
     fileReader.onload = function(e) {
         var ebmlElms = decoder.decode(this.result);
         ebmlElms.forEach(function(element) {
-            reader.read(element);
+            if (element.type !== 'unknown') {
+                reader.read(element);
+            }
         });
         reader.stop();
         var refinedMetadataBuf = tools.makeMetadataSeekable(reader.metadatas, reader.duration, reader.cues);
